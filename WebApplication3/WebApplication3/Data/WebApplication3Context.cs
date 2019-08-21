@@ -20,5 +20,11 @@ namespace WebApplication3.Models
 
         public DbSet<Mensagem> Mensagem { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

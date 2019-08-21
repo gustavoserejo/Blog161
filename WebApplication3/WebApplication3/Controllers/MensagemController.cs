@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication3.Models;
+using WebApplication3.ViewModel;
 
 namespace WebApplication3.Controllers
 {
@@ -21,8 +22,16 @@ namespace WebApplication3.Controllers
         // GET: Mensagem
         public async Task<IActionResult> Index()
         {
-            var webApplication3Context = _context.Mensagem.Include(m => m.Categorias).Include(m => m.Comentarios);
-            return View(await webApplication3Context.ToListAsync());
+            var blogContext = _context.Mensagem.Include(m => m.Categorias);
+            var blogContext1 = _context.Comentario.Include(c => c.Mensagem);
+
+            var vm = new VmMensagemComentario
+            {
+                Mensagems = await blogContext.ToListAsync(),
+                Comentarios = await blogContext1.ToListAsync()
+            };
+
+            return View(vm);
         }
 
         // GET: Mensagem/Details/5
@@ -48,8 +57,8 @@ namespace WebApplication3.Controllers
         // GET: Mensagem/Create
         public IActionResult Create()
         {
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId");
-            ViewData["ComentarioId"] = new SelectList(_context.Comentario, "ComentarioId", "ComentarioId");
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Descriacao");
+            ViewData["ComentarioId"] = new SelectList(_context.Comentario, "ComentarioId", "Descricao");
             return View();
         }
 
@@ -66,8 +75,8 @@ namespace WebApplication3.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId", mensagem.CategoriaId);
-            ViewData["ComentarioId"] = new SelectList(_context.Comentario, "ComentarioId", "ComentarioId", mensagem.ComentarioId);
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Descriacao", mensagem.CategoriaId);
+            ViewData["ComentarioId"] = new SelectList(_context.Comentario, "ComentarioId", "Descricao", mensagem.ComentarioId);
             return View(mensagem);
         }
 
@@ -84,8 +93,8 @@ namespace WebApplication3.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId", mensagem.CategoriaId);
-            ViewData["ComentarioId"] = new SelectList(_context.Comentario, "ComentarioId", "ComentarioId", mensagem.ComentarioId);
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Descriacao", mensagem.CategoriaId);
+            ViewData["ComentarioId"] = new SelectList(_context.Comentario, "ComentarioId", "Descricao", mensagem.ComentarioId);
             return View(mensagem);
         }
 
@@ -121,8 +130,8 @@ namespace WebApplication3.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "CategoriaId", mensagem.CategoriaId);
-            ViewData["ComentarioId"] = new SelectList(_context.Comentario, "ComentarioId", "ComentarioId", mensagem.ComentarioId);
+            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "CategoriaId", "Descriacao", mensagem.CategoriaId);
+            ViewData["ComentarioId"] = new SelectList(_context.Comentario, "ComentarioId", "Descricao", mensagem.ComentarioId);
             return View(mensagem);
         }
 

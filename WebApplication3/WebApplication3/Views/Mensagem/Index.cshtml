@@ -1,58 +1,55 @@
-﻿@model IEnumerable<WebApplication3.Models.Mensagem>
+﻿@model WebApplication3.ViewModel.VmMensagemComentario
 
 @{
-    ViewData["Title"] = "Mensagem";
+    ViewData["Title"] = "Fórum";
 }
 
 <h1>Mensagem</h1>
 
 <p>
-    <button type="button" class="btn btn-success"><a asp-action="Create">Novo</a></button>
+    <a class="btn btn-success" asp-action="Create" asp-controller="Mensagem">Novo</a>
 </p>
-<table class="table table-bordered table-hover text-center">
-    <thead class="thead-light">
-        <tr>
-            <th>
-                Titulo
-            </th>
-            <th>
-                Descrição
-            </th>
-            <th>
-                Data
-            </th>
-            <th>
-                Categorias
-            </th>
-            <th>
-                Comentarios
-            </th>
-            <th>Ação</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categorias.CategoriaId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comentarios.ComentarioId)
-            </td>
-            <td>
-                <button type="button" class="btn btn-warning"><a asp-action="Edit" asp-route-id="@item.Id">Editar</a></button>
-                <button type="button" class="btn btn-danger"><a asp-action="Delete" asp-route-id="@item.Id">Deletar</a></button>
-            </td>
-        </tr>
+
+@foreach (var item in Model.Comentarios)
+{
+    <div class="card mb-5">
+        <div class="card-header">
+            Titulo:  @item.Titulo - @item.Autor    <button type="button" class="btn btn-info"><a asp-action="Edit" asp-controller="Comentarios" asp-route-id="@item.ComentarioId" style="color: white" >Editar</a></button>
+            <button type="button" class="btn btn-warning"><a asp-action="Delete" asp-controller="Comentarios" asp-route-id="@item.ComentarioId">Deletar</a></button>
+
+        </div>
+        <div class="card-body">
+            @item.Descricao
+            <div class="row">
+
+                @foreach (var item2 in Model.Mensagems)
+                {
+
+                    @if (item.ComentarioId == item2.ComentarioId)
+                    {
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    @item2.Titulo
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title">@item2.Descricao</h6>
+                                    <h7 class="card-title">@item2.Data</h7>
+                                    <button type="button" class="btn btn-info"><a asp-action="Edit" asp-route-id="@item2.Id" style="color: white" >Editar</a></button>
+                                    <button type="button" class="btn btn-warning"><a asp-action="Delete" asp-route-id="@item2.Id">Deletar</a></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    }
+                }
+            </div>
+
+        </div>
+
+
+    </div>
 }
-    </tbody>
-</table>
